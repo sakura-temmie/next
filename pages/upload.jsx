@@ -2,7 +2,12 @@ import Layout from "../components/Layout";
 import { useState } from "react";
 import { db } from "../src/firebace";
 import { collection, addDoc } from "firebase/firestore";
-
+import {
+  getStorage,
+  ref,
+  getDownloadURL,
+  uploadBytesResumable,
+} from "firebase/storage";
 
 const Upload = () => {
   const [title, setTitle] = useState();
@@ -10,7 +15,7 @@ const Upload = () => {
   const [url, setUrl] = useState();
   const [image, setImage] = useState();
   const [text, setText] = useState();
-  
+
   const handleSubmit = (event) => {
     const postsCollectionRef = collection(db, "posts");
     addDoc(postsCollectionRef, {
