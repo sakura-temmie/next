@@ -1,6 +1,8 @@
 import Layout from "../components/Layout";
 import { useState } from "react";
-import Input from "../components/Input";
+import { db } from "../src/firebace";
+import { collection, addDoc } from "firebase/firestore";
+
 
 const Upload = () => {
   const [title, setTitle] = useState();
@@ -8,7 +10,17 @@ const Upload = () => {
   const [url, setUrl] = useState();
   const [image, setImage] = useState();
   const [text, setText] = useState();
-  console.log(title, date, url, text);
+  
+  const handleSubmit = (event) => {
+    const postsCollectionRef = collection(db, "posts");
+    addDoc(postsCollectionRef, {
+      title: title,
+      date: date,
+      url: url,
+      text: text,
+    });
+    alert("投稿が完了しました");
+  };
 
   return (
     <Layout>
@@ -23,7 +35,7 @@ const Upload = () => {
                 type="text"
                 className=" rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
                 placeholder="タイトル"
-                onChange={e => setTitle(e.target.value)}
+                onChange={(e) => setTitle(e.target.value)}
               />
             </div>
           </div>
@@ -33,7 +45,7 @@ const Upload = () => {
                 type="text"
                 className=" rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
                 placeholder="日付"
-                onChange={e => setDate(e.target.value)}
+                onChange={(e) => setDate(e.target.value)}
               />
             </div>
           </div>
@@ -43,7 +55,7 @@ const Upload = () => {
                 type="text"
                 className=" rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
                 placeholder="URL"
-                onChange={e => setUrl(e.target.value)}
+                onChange={(e) => setUrl(e.target.value)}
               />
             </div>
           </div>
@@ -67,7 +79,10 @@ const Upload = () => {
             </label>
           </div>
           <div className="col-span-2 text-right">
-            <button className="py-2 px-4  bg-blue-400 hover:bg-blue-700 focus:ring-indigo-500 focus:ring-offset-indigo-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg ">
+            <button
+              className="py-2 px-4  bg-blue-400 hover:bg-blue-700 focus:ring-indigo-500 focus:ring-offset-indigo-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg "
+              onClick={handleSubmit}
+            >
               投稿
             </button>
           </div>
