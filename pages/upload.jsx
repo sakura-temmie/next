@@ -17,13 +17,36 @@ const Upload = () => {
   const [text, setText] = useState();
 
   const handleSubmit = (event) => {
-    const postsCollectionRef = collection(db, "posts");
-    addDoc(postsCollectionRef, {
-      title: title,
-      date: date,
-      url: url,
-      text: text,
-    });
+    const storage = getStorage();
+    const storageRef = ref(storage, `image/${image.name}`);
+    const uploadTask = uploadBytesResumable(storageRef, image);
+
+    console.log(uploadTask);
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        console.log(snapshot);
+      },
+      (error) => {
+        console.log(error);
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          try {
+            const postsCollectionRef = collection(db, "posts");
+            addDoc(postsCollectionRef, {
+              title: title,
+              date: date,
+              url: url,
+              text: text,
+              imageUrl: downloadURL,
+            });
+          } catch (e) {
+            console.error("Error adding document: ", e);
+          }
+        });
+      }
+    );
     alert("投稿が完了しました");
   };
 

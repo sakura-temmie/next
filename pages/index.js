@@ -6,15 +6,15 @@ import { useState, useEffect } from "react";
 import { db } from "../src/firebace";
 import { collection, getDocs } from "firebase/firestore";
 
-
 export default function Home() {
-    const [posts, setPosts] = useState([]);
+  const [posts, setPosts] = useState([]);
   useEffect(() => {
-      const postsCollectionRef = collection(db, "posts");
-      getDocs(postsCollectionRef).then((querySnapshot) => {
-        setPosts(querySnapshot.docs.map((doc) => doc.data()));
-      }, []);
-  })
+    const postsCollectionRef = collection(db, "posts");
+    getDocs(postsCollectionRef).then((querySnapshot) => {
+      setPosts(querySnapshot.docs.map((doc) => doc.data()));
+    });
+  }, []);
+
   return (
     <div className={styles.container}>
       <Layout title="ホームのページです">
@@ -25,20 +25,13 @@ export default function Home() {
                 <Card
                   key={index}
                   date={post.date}
-                  src={imgSrc}
+                  src={post.imageUrl}
                   title={post.title}
                   text={post.text}
                   url={post.url}
                 />
               );
             })}
-            <Card
-              date="2022/2/12"
-              src={imgSrc}
-              title="今日の授業"
-              text="今日の授業はたくさんコンポーネントを作ります。とても大変です。ですが頑張ります。"
-              url="https://"
-            />
           </div>
         </div>
       </Layout>
